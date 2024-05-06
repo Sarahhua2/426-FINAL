@@ -1,0 +1,123 @@
+import express from 'express';
+import bodyParser from 'body-parser';
+import {Node} from './node.mjs';
+
+const app = express();
+
+const port = 3000;
+
+app.use(bodyParser.json());
+app.use('/public', express.static('public'));
+
+app.get('/nodes', (req, res) => {
+    const depth = req.query.depth; 
+ 
+    if (depth == undefined){
+        res.json(Node.getAllIDs());
+    }
+    else{
+        if(isNaN(depth) 
+            || depth < 0){
+                res.status(400).send("Bad request");
+            }
+            else{   console.log(depth)
+                res.json(Node.getAllIDsByDepth(1, depth));
+            }
+    }
+    
+});
+
+app.get('/nodes/:id', (req, res) => {
+
+    let n = Node.findByID(req.params.id);
+    if(!n) {
+        res.status(404).send("Node not found");
+    }
+
+    const depth = req.query.depth; 
+    
+    if (depth == undefined){
+        res.json(n.json());
+    }
+    else{
+        if(isNaN(depth)
+            || depth < 0){
+                res.status(400).send("Bad request");
+            }
+            else{
+                res.json(Node.findByIDByDepth(req.params.id, depth));
+            }
+    }
+});
+
+app.post('/nodes', (req, res) => {
+    let n = null;
+    if ((req.body == undefined) && (!req.body instanceof Object)
+        || (req.body.headline == undefined)
+        || (typeof req.body.headline !== 'string')
+        || (req.body.note == undefined)
+        || (typeof req.body.note !== 'string')
+        || (req.body.children_ids && req.body.children_ids.includes(1))){
+            
+            res.status(400).send("Invalid request");
+        }
+        else{
+            n = Node.create(req.body);
+        }
+    
+
+    if(!n) {
+        res.status(400).send("Bad request");
+        return;
+    }
+
+    res.status(201).json(n.json());
+});
+
+app.put('/nodes/:id', (req, res) => {
+    let n = Node.findByID(req.params.id);
+    if(!n) {
+        res.status(404).send("Node not found");
+    }
+    res.json(n.json());
+
+    let children_ids = n.getChildren();
+
+    n.setHeadline(req.body.headline);
+    n.setNote(req.body.note);
+    n.setChildren(req.body.children_ids);
+
+    for (let child_id of children_ids){
+        let child = Node.findByID(child_id);
+        let parents = child.findParents()
+        if (parents.length == 0) {
+            child.deleteNode();
+        }
+    }
+    res.json(true);
+});
+
+app.get('/parents/:id', (req, res) => {
+    let n = Node.findByID(req.params.id);
+    if(!n) {
+        res.status(404).send("Node not found");
+    }
+    res.json(Node.findParents(req.params.id));
+});
+
+Node.create({headline: "1", note: ""});
+// Node.create({headline: "2", note: ""});
+// Node.create({headline: "3", note: ""});
+// Node.create({headline: "4", note: "4", parent_ids: [2]});
+// Node.create({headline: "5", note: "5", parent_ids: [1]});
+
+
+
+app.listen(port, () => {
+    console.log('Running...');
+})
+
+app.delete('/nodes/:id', (req, res) => {
+    // Replace with your code
+    res.status(500).send("Needs to be implemented");
+});
