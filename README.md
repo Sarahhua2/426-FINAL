@@ -4,7 +4,7 @@ Video demo: https://www.youtube.com/watch?v=rSFJ5k1UK8s
 
 ## Launching the app
 
-Navigate to the 'Run and Debug' tab on VSCode, choose the 'Node.js' option from the drop-down menu, and from 'Select Launch Configuration', choose 'Run Current File'. Then navigate to 'app.mjs' and click the green arrow to run the file and start the backend server. Then use the Live Server extension to run the frontend.
+Switch to the master branch. Navigate to the 'Run and Debug' tab on VSCode, choose the 'Node.js' option from the drop-down menu, and from 'Select Launch Configuration', choose 'Run Current File'. Then navigate to 'app.mjs' and click the green arrow to run the file and start the backend server. Then use the Live Server extension to run the frontend.
 
 ## Overview
 
