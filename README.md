@@ -23,5 +23,10 @@ Our backend serves two resources (tasks and quotes) with a RESTful CRUD API
 Our website integrates a ZenQuotes API (https://zenquotes.io), that gives users a quote upon pressing the button.
 
 
+## Session Persistence
+
+A user's data is stored using session storage. Data persists throughout the pages in a single session.
+
+
 
 
