@@ -20,7 +20,7 @@ Our backend serves two resources (tasks and quotes) with a RESTful CRUD API
 
 ## Third-Party API 
 
-Our website integrates a quotes API, that gives users a quote upon pressing the button.
+Our website integrates a quotes API (https://type.fit/api/quotes), that gives users a quote upon pressing the button.
 
 
 ## Session Persistence
